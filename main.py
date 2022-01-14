@@ -104,9 +104,9 @@ def patch(cafe_id):
     if cafe_to_update:
         cafe_to_update.coffee_price = coffee_price
         db.session.commit()  
-        return jsonify(response={"success": "Successfully updated the coffee price."})
+        return jsonify(response={"success": "Successfully updated the coffee price."}), 200
     else:
-         return jsonify(error={"Not Found": "Sorry, we don't have a cafe with that id."})
+         return jsonify(error={"Not Found": "Sorry, we don't have a cafe with that id."}), 404
 ## HTTP DELETE - Delete Record
 
 
