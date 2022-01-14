@@ -2,9 +2,10 @@ from flask import Flask, jsonify, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 import requests
 import random
+import os
 
 app = Flask(__name__)
-
+SECRET_KEY = "cafedelete"
 ##Connect to Database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cafes.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -108,6 +109,21 @@ def patch(cafe_id):
     else:
          return jsonify(error={"Not Found": "Sorry, we don't have a cafe with that id."}), 404
 ## HTTP DELETE - Delete Record
+@app.route("/report-closed/<cafe_id>", methods=["GET","DELETE"])
+def delete(cafe_id):
+    secret_key = request.args.get("secret_key")
+    if SECRET_KEY == secret_key:
+        cafe_to_delete = Cafe.query.get(cafe_id)
+        if cafe_to_delete:
+            db.session.delete(cafe_to_delete)
+            db.session.commit()
+            return jsonify(response={"success": "Successfully deleted cafe."}), 200
+        else:
+            return jsonify(error={"Not Found": "Sorry, we don't have a cafe with that id."}), 404
+    return jsonify(error={"Forbidden": "Make sure you have the correct secret_key"}), 403
+            
+
+
 
 
 if __name__ == '__main__':
