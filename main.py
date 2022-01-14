@@ -65,7 +65,7 @@ def all():
         cafe_dict = cafe.to_dict()
         data.append(cafe_dict)
 
-    return jsonify(cafes=data)
+    return jsonify(cafes)
 
 @app.route("/search")
 def get_cafe_at_location():
